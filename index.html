@@ -1,1 +1,934 @@
-PLACEHOLDER
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  html, body { margin: 0; padding: 0; background: #09090B; color: #FAFAFA; }
+  * { box-sizing: border-box; }
+  input, select, textarea, button { font-family: 'Inter', system-ui, sans-serif; }
+  input::placeholder, textarea::placeholder { color: #A1A1AA; }
+  a { color: #00E5C0; text-decoration: none; }
+  a:hover { color: #00B99C; }
+  :focus-visible { outline: 2px solid #00E5C0; outline-offset: 2px; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-thumb { background: #2A2A31; border-radius: 999px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  @keyframes maFade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+</style>
+<script src="./image-slot.js"></script>
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#09090B"/><g fill="none" stroke="#FAFAFA" stroke-width="3.4"><circle cx="50" cy="50" r="26"/><ellipse cx="50" cy="50" rx="28" ry="11.5" transform="rotate(-32 50 50)" stroke="#00E5C0"/><path d="M38.5 58.5V41.5l6 10.8 6-10.8v17M53.8 58.5 59.8 41.5l6 17m-9.8-5.2h7.7" stroke-linecap="square"/></g></svg></template>
+</helmet>
+
+<div style="min-height: 100vh; background: #09090B; color: #FAFAFA; font-family: 'Inter', system-ui, sans-serif; display: flex; flex-direction: column">
+
+  <div style="display: flex; align-items: center; gap: 4px; padding: 8px 12px; background: #131316; border-bottom: 1px solid #2A2A31; position: sticky; top: 0; z-index: 60; flex-wrap: wrap">
+    <span style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #A1A1AA; margin-right: 8px; font-weight: 600">Prototipo</span>
+    <button type="button" onClick="{{ goLanding }}" style="display: flex; align-items: center; gap: 6px; background: transparent; border: 1px solid #2A2A31; color: #A1A1AA; font-size: 12px; font-weight: 500; padding: 5px 10px; border-radius: 999px; cursor: pointer; transition: all 180ms cubic-bezier(.2,.8,.2,1)" style-hover="color: #FAFAFA; border-color: #A1A1AA">
+      <sc-if value="{{ isLanding }}" hint-placeholder-val="{{ true }}"><span style="width: 5px; height: 5px; border-radius: 999px; background: #00E5C0; display: block"></span></sc-if>
+      Catálogo
+    </button>
+    <button type="button" onClick="{{ goFirstDetail }}" style="display: flex; align-items: center; gap: 6px; background: transparent; border: 1px solid #2A2A31; color: #A1A1AA; font-size: 12px; font-weight: 500; padding: 5px 10px; border-radius: 999px; cursor: pointer; transition: all 180ms cubic-bezier(.2,.8,.2,1)" style-hover="color: #FAFAFA; border-color: #A1A1AA">
+      <sc-if value="{{ isDetail }}" hint-placeholder-val="{{ true }}"><span style="width: 5px; height: 5px; border-radius: 999px; background: #00E5C0; display: block"></span></sc-if>
+      Detalle
+    </button>
+    <button type="button" onClick="{{ goAdmin }}" style="display: flex; align-items: center; gap: 6px; background: transparent; border: 1px solid #2A2A31; color: #A1A1AA; font-size: 12px; font-weight: 500; padding: 5px 10px; border-radius: 999px; cursor: pointer; transition: all 180ms cubic-bezier(.2,.8,.2,1)" style-hover="color: #FAFAFA; border-color: #A1A1AA">
+      <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ true }}"><span style="width: 5px; height: 5px; border-radius: 999px; background: #00E5C0; display: block"></span></sc-if>
+      Admin
+    </button>
+    <div style="flex: 1"></div>
+    <button type="button" onClick="{{ toggleViewport }}" style="display: flex; align-items: center; gap: 6px; background: #1E1E23; border: 1px solid #2A2A31; color: #FAFAFA; font-size: 12px; font-weight: 500; padding: 5px 10px; border-radius: 999px; cursor: pointer" style-hover="border-color: #A1A1AA">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"></rect><path d="M11 19h2"></path></svg>
+      {{ viewportLabel }}
+    </button>
+  </div>
+
+  <div style="flex: 1; display: flex; justify-content: center; align-items: flex-start; padding: 0; min-height: 0">
+    <div style="{{ wrapStyle }}">
+    <div ref="{{ scrollRef }}" onScroll="{{ onScroll }}" style="{{ frameStyle }}">
+
+      <sc-if value="{{ isLanding }}" hint-placeholder-val="{{ true }}">
+        <div>
+          <sc-if value="{{ showAnn }}" hint-placeholder-val="{{ true }}">
+            <div style="display: flex; align-items: center; justify-content: center; gap: 10px; padding: 9px 40px 9px 16px; background: rgba(0,229,192,.10); border-bottom: 1px solid #2A2A31; position: relative">
+              <span style="font-size: 12px; color: #00E5C0; text-align: center; letter-spacing: 0.01em; text-wrap: pretty">Envíos sin cargo en La Rioja Capital por compras arriba de USD 700 · Stock actualizado hoy</span>
+              <button type="button" onClick="{{ dismissAnn }}" aria-label="Cerrar aviso" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: transparent; border: 0; color: #00B99C; cursor: pointer; display: flex; padding: 4px">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"></path></svg>
+              </button>
+            </div>
+          </sc-if>
+
+          <div style="position: sticky; top: 0; z-index: 40; background: rgba(19,19,22,.82); backdrop-filter: blur(14px); border-bottom: 1px solid #2A2A31">
+            <div style="max-width: 1320px; margin: 0 auto; padding: 12px 16px; display: flex; align-items: center; gap: 12px">
+              <div onClick="{{ goLanding }}" style="display: flex; align-items: center; gap: 10px; cursor: pointer; flex-shrink: 0">
+                <svg width="30" height="30" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2" style="color: #FAFAFA; flex-shrink: 0">
+                  <circle cx="20" cy="20" r="17"></circle>
+                  <ellipse cx="20" cy="20" rx="18.5" ry="7.5" transform="rotate(-32 20 20)" stroke="#00E5C0"></ellipse>
+                  <path d="M12.5 25.5V14.5l3.9 7 3.9-7v11" stroke-linecap="square" stroke-linejoin="miter" stroke-width="2.2"></path>
+                  <path d="M22.4 25.5 26.3 14.5l3.9 11m-6.4-3.4h5" stroke-linecap="square" stroke-linejoin="miter" stroke-width="2.2"></path>
+                </svg>
+                <span style="font-family: 'Geist', system-ui, sans-serif; font-weight: 700; font-size: 16px; letter-spacing: -0.03em; white-space: nowrap">MUNDO APPLE</span>
+              </div>
+              <div style="flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px; background: #1E1E23; border: 1px solid #2A2A31; border-radius: 6px; padding: 0 10px; height: 38px">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#A1A1AA" stroke-width="1.5" stroke-linecap="round" style="flex-shrink: 0"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+                <input type="text" value="{{ queryDraft }}" onChange="{{ onQuery }}" placeholder="Buscar modelo o color" style="flex: 1; min-width: 0; background: transparent; border: 0; outline: none; color: #FAFAFA; font-size: 14px" />
+              </div>
+              <button type="button" onClick="{{ waHeader }}" aria-label="Consultar por WhatsApp" style="display: flex; align-items: center; gap: 8px; height: 38px; padding: 0 14px; background: #25D366; color: #09090B; border: 0; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; flex-shrink: 0; transition: filter 180ms cubic-bezier(.2,.8,.2,1)" style-hover="filter: brightness(1.08)">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.46 1.32 4.96L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.83 9.83 0 0 0 12.04 2Zm0 18.13c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.24 8.24 0 0 1-1.26-4.36c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.83 2.42a8.2 8.2 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.24 8.24Zm4.52-6.17c-.25-.12-1.47-.72-1.69-.8-.23-.09-.4-.13-.56.12-.17.25-.64.8-.79.97-.14.16-.29.18-.54.06-.25-.12-1.05-.39-2-1.23a7.4 7.4 0 0 1-1.36-1.7c-.14-.25-.02-.38.11-.5.11-.12.25-.29.37-.44.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.44-.06-.12-.56-1.35-.77-1.84-.2-.49-.41-.42-.56-.43h-.48c-.16 0-.42.06-.64.31-.22.25-.83.81-.83 1.98 0 1.17.85 2.3.97 2.46.12.16 1.67 2.55 4.04 3.58.57.24 1.01.39 1.35.5.57.18 1.09.15 1.5.09.46-.07 1.4-.57 1.6-1.13.2-.55.2-1.03.14-1.13-.06-.1-.23-.16-.48-.28Z"></path></svg>
+                {{ waShort }}
+              </button>
+            </div>
+          </div>
+
+          <div style="max-width: 1320px; margin: 0 auto; padding: 40px 16px 28px">
+            <h1 style="font-family: 'Geist', system-ui, sans-serif; font-weight: 700; font-size: clamp(30px, 5.4vw, 48px); line-height: 1.05; letter-spacing: -0.03em; margin: 0 0 14px; max-width: 15ch; text-wrap: pretty">iPhones con la condición real declarada.</h1>
+            <p style="font-size: 16px; line-height: 1.6; color: #A1A1AA; margin: 0 0 22px; max-width: 52ch; text-wrap: pretty">Batería, caja y garantía por escrito en cada equipo. Consultás por WhatsApp y te contesto yo, no un bot.</p>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px">
+              <span style="display: inline-flex; align-items: center; gap: 7px; padding: 7px 13px; border: 1px solid #2A2A31; background: #131316; border-radius: 999px; font-size: 12px; color: #FAFAFA; font-weight: 500">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#00E5C0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.2-2.9 7.6-7 9-4.1-1.4-7-4.8-7-9V6l7-3Z"></path><path d="m9 12 2 2 4-4"></path></svg>
+                Garantía escrita
+              </span>
+              <span style="display: inline-flex; align-items: center; gap: 7px; padding: 7px 13px; border: 1px solid #2A2A31; background: #131316; border-radius: 999px; font-size: 12px; color: #FAFAFA; font-weight: 500">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#00E5C0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="17" height="10" rx="2"></rect><path d="M22 11v2"></path><path d="M5 10v4h6v-4Z" fill="#00E5C0" stroke="none"></path></svg>
+                Batería declarada
+              </span>
+              <span style="display: inline-flex; align-items: center; gap: 7px; padding: 7px 13px; border: 1px solid #2A2A31; background: #131316; border-radius: 999px; font-size: 12px; color: #FAFAFA; font-weight: 500">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#00E5C0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7h11v10H2zM13 10h4l4 3v4h-8z"></path><circle cx="6" cy="18" r="1.6"></circle><circle cx="17" cy="18" r="1.6"></circle></svg>
+                Entrega en La Rioja, Capital
+              </span>
+            </div>
+          </div>
+
+          <div style="position: sticky; top: 62px; z-index: 30; background: rgba(9,9,11,.9); backdrop-filter: blur(14px); border-top: 1px solid #2A2A31; border-bottom: 1px solid #2A2A31">
+            <div style="max-width: 1320px; margin: 0 auto; padding: 12px 16px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px">
+              <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: #A1A1AA; font-weight: 600; margin-right: 2px">Gen</span>
+              <sc-for list="{{ genChips }}" as="c" hint-placeholder-count="5">
+                <button type="button" onClick="{{ c.toggle }}" style="{{ c.style }}">{{ c.label }}</button>
+              </sc-for>
+              <span style="width: 1px; height: 20px; background: #2A2A31; margin: 0 4px"></span>
+              <sc-for list="{{ condChips }}" as="c" hint-placeholder-count="3">
+                <button type="button" onClick="{{ c.toggle }}" style="{{ c.style }}">{{ c.label }}</button>
+              </sc-for>
+              <span style="width: 1px; height: 20px; background: #2A2A31; margin: 0 4px"></span>
+              <sc-for list="{{ capChips }}" as="c" hint-placeholder-count="3">
+                <button type="button" onClick="{{ c.toggle }}" style="{{ c.style }}">{{ c.label }}</button>
+              </sc-for>
+              <span style="width: 1px; height: 20px; background: #2A2A31; margin: 0 4px"></span>
+              <div style="display: flex; align-items: center; gap: 8px; padding: 4px 10px; border: 1px solid #2A2A31; border-radius: 999px; background: #131316">
+                <span style="font-size: 11px; color: #A1A1AA; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600">USD</span>
+                <input type="range" min="300" max="1600" step="50" value="{{ priceMin }}" onChange="{{ onPriceMin }}" aria-label="Precio mínimo" style="width: 64px; accent-color: #00E5C0; height: 18px" />
+                <input type="range" min="300" max="1600" step="50" value="{{ priceMax }}" onChange="{{ onPriceMax }}" aria-label="Precio máximo" style="width: 64px; accent-color: #00E5C0; height: 18px" />
+                <span style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 12px; color: #FAFAFA; font-variant-numeric: tabular-nums; white-space: nowrap">{{ priceRangeLabel }}</span>
+              </div>
+              <div style="flex: 1; min-width: 8px"></div>
+              <select value="{{ sort }}" onChange="{{ onSort }}" aria-label="Ordenar" style="height: 32px; background: #131316; color: #FAFAFA; border: 1px solid #2A2A31; border-radius: 6px; font-size: 12px; padding: 0 8px; cursor: pointer">
+                <option value="recientes">Recientes</option>
+                <option value="asc">Precio ↑</option>
+                <option value="desc">Precio ↓</option>
+              </select>
+            </div>
+            <div style="max-width: 1320px; margin: 0 auto; padding: 0 16px 12px; display: flex; align-items: center; gap: 12px">
+              <span style="font-size: 12px; color: #A1A1AA; font-variant-numeric: tabular-nums">{{ resultsLabel }}</span>
+              <sc-if value="{{ anyFilter }}" hint-placeholder-val="{{ true }}">
+                <button type="button" onClick="{{ clearFilters }}" style="display: flex; align-items: center; gap: 5px; background: transparent; border: 0; color: #00E5C0; font-size: 12px; font-weight: 500; cursor: pointer; padding: 2px 0" style-hover="color: #00B99C">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"></path></svg>
+                  Limpiar filtros
+                </button>
+              </sc-if>
+              <span style="font-size: 12px; color: #A1A1AA; font-family: 'Geist Mono', ui-monospace, monospace; margin-left: auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{ urlLabel }}</span>
+            </div>
+          </div>
+
+          <div style="max-width: 1320px; margin: 0 auto; padding: 24px 16px 56px">
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(232px, 1fr)); gap: 20px">
+              <sc-for list="{{ visible }}" as="p" hint-placeholder-count="8">
+                <div style="background: #131316; border: 1px solid #2A2A31; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; transition: transform 180ms cubic-bezier(.2,.8,.2,1), border-color 180ms cubic-bezier(.2,.8,.2,1), box-shadow 180ms cubic-bezier(.2,.8,.2,1)" style-hover="transform: translateY(-4px); border-color: #00E5C0; box-shadow: 0 8px 32px -8px rgba(0,229,192,.25)">
+                  <div style="position: relative; aspect-ratio: 4/5; background: #131316; border-bottom: 1px solid #2A2A31">
+                    <image-slot id="{{ p.imgId }}" shape="rect" placeholder="{{ p.imgHint }}"></image-slot>
+                    <div style="position: absolute; top: 10px; left: 10px; display: flex; flex-direction: column; gap: 6px; align-items: flex-start; pointer-events: none; z-index: 2">
+                      <span style="{{ p.badgeStyle }}">{{ p.badgeLabel }}</span>
+                      <sc-if value="{{ p.isLast }}" hint-placeholder-val="{{ true }}">
+                        <span style="padding: 4px 9px; border-radius: 999px; font-size: 11px; font-weight: 600; letter-spacing: 0.02em; background: rgba(243,18,96,.14); color: #F31260">ÚLTIMO</span>
+                      </sc-if>
+                    </div>
+                  </div>
+                  <div onClick="{{ p.open }}" style="padding: 14px 14px 12px; cursor: pointer; flex: 1; display: flex; flex-direction: column; gap: 8px">
+                    <h3 style="font-family: 'Geist', system-ui, sans-serif; font-weight: 600; font-size: 17px; line-height: 1.2; letter-spacing: -0.01em; margin: 0">{{ p.model }}</h3>
+                    <p style="font-size: 13px; line-height: 1.5; color: #A1A1AA; margin: 0">{{ p.specLine }}</p>
+                    <div style="margin-top: auto; padding-top: 6px">
+                      <div style="font-family: 'Geist Mono', ui-monospace, monospace; font-weight: 500; font-size: 24px; color: #00E5C0; font-variant-numeric: tabular-nums; letter-spacing: -0.02em">{{ p.priceUsdLabel }}</div>
+                      <sc-if value="{{ p.showArs }}" hint-placeholder-val="{{ true }}">
+                        <div style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 14px; color: #A1A1AA; font-variant-numeric: tabular-nums; margin-top: 2px">{{ p.priceArsLabel }}</div>
+                      </sc-if>
+                    </div>
+                  </div>
+                  <div style="padding: 0 14px 14px">
+                    <button type="button" onClick="{{ p.wa }}" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; background: #25D366; color: #09090B; border: 0; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: filter 180ms cubic-bezier(.2,.8,.2,1)" style-hover="filter: brightness(1.08)">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.46 1.32 4.96L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.83 9.83 0 0 0 12.04 2Zm0 18.13c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.24 8.24 0 0 1-1.26-4.36c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.83 2.42a8.2 8.2 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.24 8.24Zm4.52-6.17c-.25-.12-1.47-.72-1.69-.8-.23-.09-.4-.13-.56.12-.17.25-.64.8-.79.97-.14.16-.29.18-.54.06-.25-.12-1.05-.39-2-1.23a7.4 7.4 0 0 1-1.36-1.7c-.14-.25-.02-.38.11-.5.11-.12.25-.29.37-.44.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.44-.06-.12-.56-1.35-.77-1.84-.2-.49-.41-.42-.56-.43h-.48c-.16 0-.42.06-.64.31-.22.25-.83.81-.83 1.98 0 1.17.85 2.3.97 2.46.12.16 1.67 2.55 4.04 3.58.57.24 1.01.39 1.35.5.57.18 1.09.15 1.5.09.46-.07 1.4-.57 1.6-1.13.2-.55.2-1.03.14-1.13-.06-.1-.23-.16-.48-.28Z"></path></svg>
+                      Consultar
+                    </button>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+
+            <sc-if value="{{ empty }}" hint-placeholder-val="{{ false }}">
+              <div style="border: 1px dashed #2A2A31; border-radius: 12px; padding: 56px 24px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 12px">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#A1A1AA" stroke-width="1.5" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+                <p style="font-family: 'Geist', system-ui, sans-serif; font-size: 18px; font-weight: 600; margin: 0; letter-spacing: -0.01em">Ningún equipo coincide con esos filtros</p>
+                <p style="font-size: 14px; color: #A1A1AA; margin: 0">Probá ampliar el rango de precio o quitar una condición.</p>
+                <button type="button" onClick="{{ clearFilters }}" style="margin-top: 4px; min-height: 40px; padding: 0 18px; background: transparent; border: 1px solid #00E5C0; color: #00E5C0; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer" style-hover="background: rgba(0,229,192,.1)">Limpiar filtros</button>
+              </div>
+            </sc-if>
+          </div>
+
+          <div style="border-top: 1px solid #2A2A31; background: #131316">
+            <div style="max-width: 1320px; margin: 0 auto; padding: 48px 16px; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 32px">
+              <div style="display: flex; flex-direction: column; gap: 10px">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00E5C0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12.04 3C7.6 3 4 6.6 4 11c0 1.5.4 2.9 1.2 4.1L4 20l4.9-1.2A8 8 0 0 0 20 11c0-4.4-3.6-8-7.96-8Z"></path></svg>
+                <h3 style="font-family: 'Geist', system-ui, sans-serif; font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0">Cómo compro</h3>
+                <p style="font-size: 14px; line-height: 1.6; color: #A1A1AA; margin: 0; text-wrap: pretty">Elegís el equipo, me escribís por WhatsApp y coordinamos. Te mando fotos reales y el número de serie antes de que pagues.</p>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 10px">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00E5C0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.2-2.9 7.6-7 9-4.1-1.4-7-4.8-7-9V6l7-3Z"></path><path d="m9 12 2 2 4-4"></path></svg>
+                <h3 style="font-family: 'Geist', system-ui, sans-serif; font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0">Garantía</h3>
+                <p style="font-size: 14px; line-height: 1.6; color: #A1A1AA; margin: 0; text-wrap: pretty">De 3 a 12 meses según el equipo, siempre por escrito en el remito. Cubre hardware, no roturas por golpe o mojadura.</p>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 10px">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00E5C0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><path d="M2 10h20"></path></svg>
+                <h3 style="font-family: 'Geist', system-ui, sans-serif; font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin: 0">Métodos de pago</h3>
+                <p style="font-size: 14px; line-height: 1.6; color: #A1A1AA; margin: 0; text-wrap: pretty">Efectivo en USD o pesos al cambio del día, transferencia y USDT. Tarjeta en 3 cuotas con recargo.</p>
+              </div>
+            </div>
+            <div style="border-top: 1px solid #2A2A31">
+              <div style="max-width: 1320px; margin: 0 auto; padding: 28px 16px 40px; display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start; justify-content: space-between">
+                <div style="display: flex; flex-direction: column; gap: 12px; max-width: 56ch">
+                  <div style="display: flex; align-items: center; gap: 10px">
+                    <svg width="26" height="26" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2" style="color: #A1A1AA">
+                      <circle cx="20" cy="20" r="17"></circle>
+                      <ellipse cx="20" cy="20" rx="18.5" ry="7.5" transform="rotate(-32 20 20)"></ellipse>
+                      <path d="M12.5 25.5V14.5l3.9 7 3.9-7v11" stroke-linecap="square" stroke-linejoin="miter" stroke-width="2.2"></path>
+                      <path d="M22.4 25.5 26.3 14.5l3.9 11m-6.4-3.4h5" stroke-linecap="square" stroke-linejoin="miter" stroke-width="2.2"></path>
+                    </svg>
+                    <span style="font-family: 'Geist', system-ui, sans-serif; font-weight: 600; font-size: 14px; letter-spacing: -0.02em; color: #A1A1AA">MUNDO APPLE</span>
+                  </div>
+                  <p style="font-size: 12px; line-height: 1.5; color: #A1A1AA; margin: 0; text-wrap: pretty">Mundo Apple es un revendedor independiente. No está afiliado, asociado ni respaldado por Apple Inc. iPhone y Apple son marcas registradas de Apple Inc.</p>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 8px">
+                  <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: #A1A1AA; font-weight: 600">Contacto</span>
+                  <a href="#" style="font-size: 13px; color: #A1A1AA" style-hover="color: #FAFAFA">Instagram @mundoapple</a>
+                  <a href="#" style="font-size: 13px; color: #A1A1AA" style-hover="color: #FAFAFA">hola@mundoapple.com.ar</a>
+                  <a href="#" style="font-size: 13px; color: #A1A1AA" style-hover="color: #FAFAFA">La Rioja, Capital</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isDetail }}" hint-placeholder-val="{{ false }}">
+        <div>
+          <div style="position: sticky; top: 0; z-index: 40; background: rgba(19,19,22,.82); backdrop-filter: blur(14px); border-bottom: 1px solid #2A2A31">
+            <div style="max-width: 1240px; margin: 0 auto; padding: 12px 16px; display: flex; align-items: center; gap: 12px">
+              <button type="button" onClick="{{ goLanding }}" style="display: flex; align-items: center; gap: 7px; background: transparent; border: 1px solid #2A2A31; color: #FAFAFA; border-radius: 8px; min-height: 38px; padding: 0 12px; font-size: 13px; font-weight: 500; cursor: pointer" style-hover="border-color: #A1A1AA">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg>
+                Catálogo
+              </button>
+              <div style="flex: 1"></div>
+              <span style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 12px; color: #A1A1AA; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{ d.urlLabel }}</span>
+            </div>
+          </div>
+
+          <div style="max-width: 1240px; margin: 0 auto; padding: 28px 16px 120px; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 36px; align-items: start">
+            <div style="display: flex; flex-direction: column; gap: 12px">
+              <div onClick="{{ openLightbox }}" style="position: relative; aspect-ratio: 4/5; background: #131316; border: 1px solid #2A2A31; border-radius: 12px; overflow: hidden">
+                <image-slot id="{{ d.imgId }}" shape="rect" placeholder="{{ d.imgHint }}"></image-slot>
+                <div style="position: absolute; top: 12px; left: 12px; z-index: 2; pointer-events: none"><span style="{{ d.badgeStyle }}">{{ d.badgeLabel }}</span></div>
+              </div>
+              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px">
+                <div style="aspect-ratio: 1; background: #131316; border: 1px solid #2A2A31; border-radius: 8px; overflow: hidden"><image-slot id="{{ d.imgId2 }}" shape="rect" placeholder="Foto 2"></image-slot></div>
+                <div style="aspect-ratio: 1; background: #131316; border: 1px solid #2A2A31; border-radius: 8px; overflow: hidden"><image-slot id="{{ d.imgId3 }}" shape="rect" placeholder="Foto 3"></image-slot></div>
+                <div style="aspect-ratio: 1; background: #131316; border: 1px solid #2A2A31; border-radius: 8px; overflow: hidden"><image-slot id="{{ d.imgId4 }}" shape="rect" placeholder="Batería"></image-slot></div>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 20px; position: sticky; top: 76px">
+              <div style="display: flex; flex-direction: column; gap: 10px">
+                <h1 style="font-family: 'Geist', system-ui, sans-serif; font-weight: 700; font-size: clamp(28px, 4vw, 36px); line-height: 1.1; letter-spacing: -0.03em; margin: 0">{{ d.model }}</h1>
+                <p style="font-size: 15px; color: #A1A1AA; margin: 0">{{ d.specLine }}</p>
+              </div>
+              <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap">
+                <span style="font-family: 'Geist Mono', ui-monospace, monospace; font-weight: 500; font-size: 40px; color: #00E5C0; font-variant-numeric: tabular-nums; letter-spacing: -0.03em; line-height: 1">{{ d.priceUsdLabel }}</span>
+                <sc-if value="{{ d.showArs }}" hint-placeholder-val="{{ true }}">
+                  <span style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 15px; color: #A1A1AA; font-variant-numeric: tabular-nums">{{ d.priceArsLabel }}</span>
+                </sc-if>
+              </div>
+              <button type="button" onClick="{{ d.wa }}" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; background: #25D366; color: #09090B; border: 0; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: filter 180ms cubic-bezier(.2,.8,.2,1)" style-hover="filter: brightness(1.08)">
+                <svg width="21" height="21" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.46 1.32 4.96L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.83 9.83 0 0 0 12.04 2Zm0 18.13c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.24 8.24 0 0 1-1.26-4.36c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.83 2.42a8.2 8.2 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.24 8.24Zm4.52-6.17c-.25-.12-1.47-.72-1.69-.8-.23-.09-.4-.13-.56.12-.17.25-.64.8-.79.97-.14.16-.29.18-.54.06-.25-.12-1.05-.39-2-1.23a7.4 7.4 0 0 1-1.36-1.7c-.14-.25-.02-.38.11-.5.11-.12.25-.29.37-.44.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.44-.06-.12-.56-1.35-.77-1.84-.2-.49-.41-.42-.56-.43h-.48c-.16 0-.42.06-.64.31-.22.25-.83.81-.83 1.98 0 1.17.85 2.3.97 2.46.12.16 1.67 2.55 4.04 3.58.57.24 1.01.39 1.35.5.57.18 1.09.15 1.5.09.46-.07 1.4-.57 1.6-1.13.2-.55.2-1.03.14-1.13-.06-.1-.23-.16-.48-.28Z"></path></svg>
+                Consultar por WhatsApp
+              </button>
+              <div style="border: 1px solid #2A2A31; border-radius: 12px; overflow: hidden">
+                <sc-for list="{{ d.specRows }}" as="r" hint-placeholder-count="6">
+                  <div style="display: grid; grid-template-columns: minmax(96px, 34%) 1fr; gap: 12px; padding: 11px 14px; border-bottom: 1px solid #2A2A31">
+                    <span style="font-size: 13px; color: #A1A1AA">{{ r.k }}</span>
+                    <span style="font-size: 13px; color: #FAFAFA; font-family: 'Geist Mono', ui-monospace, monospace; font-variant-numeric: tabular-nums; text-align: right">{{ r.v }}</span>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 10px; padding: 16px; background: #131316; border: 1px solid #2A2A31; border-radius: 12px">
+                <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: #A1A1AA; font-weight: 600">Qué incluye</span>
+                <sc-for list="{{ d.includes }}" as="i" hint-placeholder-count="3">
+                  <div style="display: flex; align-items: center; gap: 9px">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00E5C0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0"><path d="m5 13 4 4L19 7"></path></svg>
+                    <span style="font-size: 14px; color: #FAFAFA">{{ i.t }}</span>
+                  </div>
+                </sc-for>
+              </div>
+              <p style="font-size: 14px; line-height: 1.6; color: #A1A1AA; margin: 0; text-wrap: pretty">{{ d.description }}</p>
+            </div>
+          </div>
+
+          <div style="max-width: 1240px; margin: 0 auto; padding: 0 16px 72px">
+            <h2 style="font-family: 'Geist', system-ui, sans-serif; font-weight: 600; font-size: 24px; letter-spacing: -0.02em; margin: 0 0 18px">Equipos relacionados</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px">
+              <sc-for list="{{ related }}" as="p" hint-placeholder-count="4">
+                <div onClick="{{ p.open }}" style="background: #131316; border: 1px solid #2A2A31; border-radius: 12px; overflow: hidden; cursor: pointer; transition: transform 180ms cubic-bezier(.2,.8,.2,1), border-color 180ms cubic-bezier(.2,.8,.2,1)" style-hover="transform: translateY(-4px); border-color: #00E5C0">
+                  <div style="aspect-ratio: 4/5; background: #131316; border-bottom: 1px solid #2A2A31"><image-slot id="{{ p.relImgId }}" shape="rect" placeholder="{{ p.imgHint }}"></image-slot></div>
+                  <div style="padding: 12px">
+                    <h3 style="font-family: 'Geist', system-ui, sans-serif; font-weight: 600; font-size: 14px; margin: 0 0 4px; letter-spacing: -0.01em">{{ p.model }}</h3>
+                    <p style="font-size: 12px; color: #A1A1AA; margin: 0 0 8px">{{ p.shortSpec }}</p>
+                    <div style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 16px; color: #00E5C0; font-variant-numeric: tabular-nums">{{ p.priceUsdLabel }}</div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isAdminLogin }}" hint-placeholder-val="{{ false }}">
+        <div style="min-height: 70vh; display: flex; align-items: center; justify-content: center; padding: 40px 16px">
+          <div style="width: 100%; max-width: 380px; background: #131316; border: 1px solid #2A2A31; border-radius: 12px; padding: 28px; display: flex; flex-direction: column; gap: 16px">
+            <svg width="34" height="34" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2" style="color: #FAFAFA">
+              <circle cx="20" cy="20" r="17"></circle>
+              <ellipse cx="20" cy="20" rx="18.5" ry="7.5" transform="rotate(-32 20 20)" stroke="#00E5C0"></ellipse>
+              <path d="M12.5 25.5V14.5l3.9 7 3.9-7v11" stroke-linecap="square" stroke-linejoin="miter" stroke-width="2.2"></path>
+              <path d="M22.4 25.5 26.3 14.5l3.9 11m-6.4-3.4h5" stroke-linecap="square" stroke-linejoin="miter" stroke-width="2.2"></path>
+            </svg>
+            <div>
+              <h1 style="font-family: 'Geist', system-ui, sans-serif; font-weight: 700; font-size: 24px; letter-spacing: -0.02em; margin: 0 0 6px">Panel de carga</h1>
+              <p style="font-size: 14px; color: #A1A1AA; margin: 0">Acceso solo para el administrador de la tienda.</p>
+            </div>
+            <label style="display: flex; flex-direction: column; gap: 6px">
+              <span style="font-size: 12px; color: #A1A1AA; font-weight: 500">Email</span>
+              <input type="email" value="{{ loginEmail }}" onChange="{{ onLoginEmail }}" placeholder="hola@mundoapple.com.ar" style="height: 42px; background: #1E1E23; border: 1px solid #2A2A31; border-radius: 6px; color: #FAFAFA; font-size: 14px; padding: 0 12px; outline: none" />
+            </label>
+            <label style="display: flex; flex-direction: column; gap: 6px">
+              <span style="font-size: 12px; color: #A1A1AA; font-weight: 500">Contraseña</span>
+              <input type="password" value="{{ loginPass }}" onChange="{{ onLoginPass }}" placeholder="••••••••" style="height: 42px; background: #1E1E23; border: 1px solid #2A2A31; border-radius: 6px; color: #FAFAFA; font-size: 14px; padding: 0 12px; outline: none" />
+            </label>
+            <sc-if value="{{ loginError }}" hint-placeholder-val="{{ false }}">
+              <div style="display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: rgba(243,18,96,.12); border-radius: 6px">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#F31260" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v4M12 16h.01"></path></svg>
+                <span style="font-size: 13px; color: #F31260">Credenciales inválidas. Revisá el email y la contraseña.</span>
+              </div>
+            </sc-if>
+            <button type="button" onClick="{{ doLogin }}" style="min-height: 46px; background: #00E5C0; color: #09090B; border: 0; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; box-shadow: 0 0 0 1px #00E5C0, 0 8px 32px -8px rgba(0,229,192,.25); transition: background 180ms cubic-bezier(.2,.8,.2,1)" style-hover="background: #00B99C">Entrar</button>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isAdminDash }}" hint-placeholder-val="{{ false }}">
+        <div style="max-width: 1240px; margin: 0 auto; padding: 28px 16px 72px">
+          <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; justify-content: space-between; margin-bottom: 24px">
+            <div>
+              <h1 style="font-family: 'Geist', system-ui, sans-serif; font-weight: 700; font-size: 30px; letter-spacing: -0.03em; margin: 0 0 6px">Productos</h1>
+              <p style="font-size: 14px; color: #A1A1AA; margin: 0">Cargá, publicá y despublicá equipos. Los cambios se ven en el catálogo al instante.</p>
+            </div>
+            <button type="button" onClick="{{ newProduct }}" style="display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px; background: #00E5C0; color: #09090B; border: 0; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; box-shadow: 0 0 0 1px #00E5C0, 0 8px 32px -8px rgba(0,229,192,.25); transition: background 180ms cubic-bezier(.2,.8,.2,1)" style-hover="background: #00B99C">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+              Nuevo producto
+            </button>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 24px">
+            <sc-for list="{{ counters }}" as="c" hint-placeholder-count="4">
+              <div style="background: #131316; border: 1px solid #2A2A31; border-radius: 12px; padding: 16px">
+                <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: #A1A1AA; font-weight: 600; margin-bottom: 8px">{{ c.label }}</div>
+                <div style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 28px; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; color: #FAFAFA">{{ c.value }}</div>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 14px">
+            <div style="display: flex; align-items: center; gap: 8px; background: #131316; border: 1px solid #2A2A31; border-radius: 6px; padding: 0 10px; height: 38px; flex: 1; min-width: 180px">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#A1A1AA" stroke-width="1.5" stroke-linecap="round" style="flex-shrink: 0"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+              <input type="text" value="{{ adminQuery }}" onChange="{{ onAdminQuery }}" placeholder="Buscar en el inventario" style="flex: 1; min-width: 0; background: transparent; border: 0; outline: none; color: #FAFAFA; font-size: 14px" />
+            </div>
+            <sc-for list="{{ statusChips }}" as="c" hint-placeholder-count="4">
+              <button type="button" onClick="{{ c.toggle }}" style="{{ c.style }}">{{ c.label }}</button>
+            </sc-for>
+          </div>
+
+          <div style="border: 1px solid #2A2A31; border-radius: 12px; overflow: hidden; background: #131316">
+            <div style="overflow-x: auto">
+              <div style="min-width: 760px">
+                <div style="display: grid; grid-template-columns: 2.2fr 1.1fr 1fr 0.6fr 1fr 1.5fr; gap: 12px; padding: 11px 16px; border-bottom: 1px solid #2A2A31; background: #1E1E23">
+                  <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: #A1A1AA; font-weight: 600">Producto</span>
+                  <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: #A1A1AA; font-weight: 600">Condición</span>
+                  <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: #A1A1AA; font-weight: 600">Precio</span>
+                  <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: #A1A1AA; font-weight: 600">Stock</span>
+                  <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: #A1A1AA; font-weight: 600">Estado</span>
+                  <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: #A1A1AA; font-weight: 600; text-align: right">Acciones</span>
+                </div>
+                <sc-for list="{{ adminRows }}" as="r" hint-placeholder-count="6">
+                  <div style="display: grid; grid-template-columns: 2.2fr 1.1fr 1fr 0.6fr 1fr 1.5fr; gap: 12px; padding: 12px 16px; border-bottom: 1px solid #2A2A31; align-items: center; transition: background 180ms cubic-bezier(.2,.8,.2,1)" style-hover="background: #1E1E23">
+                    <div style="min-width: 0">
+                      <div style="font-family: 'Geist', system-ui, sans-serif; font-weight: 600; font-size: 14px; letter-spacing: -0.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{ r.model }}</div>
+                      <div style="font-size: 12px; color: #A1A1AA; font-family: 'Geist Mono', ui-monospace, monospace; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{ r.slug }}</div>
+                    </div>
+                    <div><span style="{{ r.badgeStyle }}">{{ r.badgeLabel }}</span></div>
+                    <div style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 14px; color: #FAFAFA; font-variant-numeric: tabular-nums">{{ r.priceUsdLabel }}</div>
+                    <div style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 14px; font-variant-numeric: tabular-nums; color: #A1A1AA">{{ r.stock }}</div>
+                    <div><span style="{{ r.statusStyle }}">{{ r.statusLabel }}</span></div>
+                    <div style="display: flex; gap: 6px; justify-content: flex-end; flex-wrap: wrap">
+                      <sc-if value="{{ r.confirming }}" hint-placeholder-val="{{ false }}">
+                        <div style="display: flex; gap: 6px; align-items: center">
+                          <span style="font-size: 12px; color: #F31260">¿Eliminar?</span>
+                          <button type="button" onClick="{{ r.del }}" style="background: #F31260; color: #FAFAFA; border: 0; border-radius: 6px; height: 30px; padding: 0 10px; font-size: 12px; font-weight: 600; cursor: pointer">Sí</button>
+                          <button type="button" onClick="{{ r.cancelDel }}" style="background: transparent; color: #A1A1AA; border: 1px solid #2A2A31; border-radius: 6px; height: 30px; padding: 0 10px; font-size: 12px; cursor: pointer">No</button>
+                        </div>
+                      </sc-if>
+                      <sc-if value="{{ r.idle }}" hint-placeholder-val="{{ true }}">
+                        <div style="display: flex; gap: 6px">
+                          <button type="button" onClick="{{ r.edit }}" aria-label="Editar" style="display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; background: transparent; border: 1px solid #2A2A31; border-radius: 6px; color: #A1A1AA; cursor: pointer" style-hover="color: #FAFAFA; border-color: #A1A1AA">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3l4 4-11 11H6v-4L17 3Z"></path></svg>
+                          </button>
+                          <button type="button" onClick="{{ r.togglePublish }}" style="height: 30px; padding: 0 10px; background: transparent; border: 1px solid #2A2A31; border-radius: 6px; color: #00E5C0; font-size: 12px; font-weight: 500; cursor: pointer; white-space: nowrap" style-hover="border-color: #00E5C0">{{ r.publishLabel }}</button>
+                          <button type="button" onClick="{{ r.dup }}" aria-label="Duplicar" style="display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; background: transparent; border: 1px solid #2A2A31; border-radius: 6px; color: #A1A1AA; cursor: pointer" style-hover="color: #FAFAFA; border-color: #A1A1AA">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"></rect><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"></path></svg>
+                          </button>
+                          <button type="button" onClick="{{ r.askDel }}" aria-label="Eliminar" style="display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; background: transparent; border: 1px solid #2A2A31; border-radius: 6px; color: #A1A1AA; cursor: pointer" style-hover="color: #F31260; border-color: #F31260">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"></path></svg>
+                          </button>
+                        </div>
+                      </sc-if>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <sc-if value="{{ adminEmpty }}" hint-placeholder-val="{{ false }}">
+              <div style="padding: 40px; text-align: center; font-size: 14px; color: #A1A1AA">Sin resultados para esa búsqueda.</div>
+            </sc-if>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isAdminForm }}" hint-placeholder-val="{{ false }}">
+        <div style="max-width: 1000px; margin: 0 auto; padding: 28px 16px 72px">
+          <button type="button" onClick="{{ goAdminDash }}" style="display: flex; align-items: center; gap: 7px; background: transparent; border: 1px solid #2A2A31; color: #A1A1AA; border-radius: 8px; min-height: 36px; padding: 0 12px; font-size: 13px; cursor: pointer; margin-bottom: 20px" style-hover="color: #FAFAFA; border-color: #A1A1AA">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg>
+            Productos
+          </button>
+          <h1 style="font-family: 'Geist', system-ui, sans-serif; font-weight: 700; font-size: 30px; letter-spacing: -0.03em; margin: 0 0 24px">{{ formTitle }}</h1>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; align-items: start">
+            <div style="display: flex; flex-direction: column; gap: 16px; background: #131316; border: 1px solid #2A2A31; border-radius: 12px; padding: 20px">
+              <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: #A1A1AA; font-weight: 600">Datos del equipo</span>
+              <sc-for list="{{ formFields }}" as="f" hint-placeholder-count="8">
+                <label style="display: flex; flex-direction: column; gap: 6px">
+                  <span style="font-size: 12px; color: #A1A1AA; font-weight: 500">{{ f.label }}</span>
+                  <input type="text" value="{{ f.value }}" onChange="{{ f.onChange }}" placeholder="{{ f.placeholder }}" style="height: 40px; background: #1E1E23; border: 1px solid #2A2A31; border-radius: 6px; color: #FAFAFA; font-size: 14px; padding: 0 12px; outline: none; font-family: 'Inter', system-ui, sans-serif" />
+                  <sc-if value="{{ f.subLabel }}" hint-placeholder-val="{{ false }}">
+                    <span style="font-size: 12px; color: #00E5C0; font-family: 'Geist Mono', ui-monospace, monospace">{{ f.subLabel }}</span>
+                  </sc-if>
+                </label>
+              </sc-for>
+              <label style="display: flex; flex-direction: column; gap: 6px">
+                <span style="font-size: 12px; color: #A1A1AA; font-weight: 500">Condición</span>
+                <select value="{{ formCondition }}" onChange="{{ onFormCondition }}" style="height: 40px; background: #1E1E23; border: 1px solid #2A2A31; border-radius: 6px; color: #FAFAFA; font-size: 14px; padding: 0 10px; cursor: pointer">
+                  <option value="nuevo">Nuevo sellado</option>
+                  <option value="seminuevo">Seminuevo</option>
+                  <option value="reacondicionado">Reacondicionado</option>
+                </select>
+              </label>
+              <label style="display: flex; flex-direction: column; gap: 6px">
+                <span style="font-size: 12px; color: #A1A1AA; font-weight: 500">Descripción</span>
+                <textarea value="{{ formDescription }}" onChange="{{ onFormDescription }}" rows="4" placeholder="Estado estético, detalles, si tiene caja y accesorios." style="background: #1E1E23; border: 1px solid #2A2A31; border-radius: 6px; color: #FAFAFA; font-size: 14px; padding: 10px 12px; outline: none; resize: vertical; line-height: 1.5"></textarea>
+              </label>
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px; background: #1E1E23; border-radius: 6px">
+                <div>
+                  <div style="font-size: 13px; font-weight: 500">Destacado en el hero</div>
+                  <div style="font-size: 12px; color: #A1A1AA">Aparece primero en el catálogo</div>
+                </div>
+                <button type="button" onClick="{{ toggleFeatured }}" aria-label="Destacar producto" style="{{ featuredToggleStyle }}"><span style="{{ featuredKnobStyle }}"></span></button>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 6px; padding-top: 4px; border-top: 1px solid #2A2A31">
+                <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: #A1A1AA; font-weight: 600; padding-top: 12px">Slug generado</span>
+                <span style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 13px; color: #00E5C0; word-break: break-all">{{ formSlug }}</span>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 16px">
+              <div style="background: #131316; border: 1px solid #2A2A31; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+                <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: #A1A1AA; font-weight: 600">Fotos</span>
+                <p style="font-size: 12px; color: #A1A1AA; margin: 0; line-height: 1.5">Tocá un espacio para sacar la foto con la cámara o elegirla de la galería (en celular te va a preguntar cuál de las dos). En computadora, arrastrá el archivo o hacé clic para buscarlo. Se comprimen a WebP, máximo 1600px. La primera es la portada.</p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 10px">
+                  <div style="aspect-ratio: 4/5; border: 1px dashed #2A2A31; border-radius: 8px; overflow: hidden"><image-slot id="admin-up-1" shape="rect" placeholder="Portada"></image-slot></div>
+                  <div style="aspect-ratio: 4/5; border: 1px dashed #2A2A31; border-radius: 8px; overflow: hidden"><image-slot id="admin-up-2" shape="rect" placeholder="Foto 2"></image-slot></div>
+                  <div style="aspect-ratio: 4/5; border: 1px dashed #2A2A31; border-radius: 8px; overflow: hidden"><image-slot id="admin-up-3" shape="rect" placeholder="Foto 3"></image-slot></div>
+                  <div style="aspect-ratio: 4/5; border: 1px dashed #2A2A31; border-radius: 8px; overflow: hidden"><image-slot id="admin-up-4" shape="rect" placeholder="Batería"></image-slot></div>
+                </div>
+              </div>
+              <div style="background: #131316; border: 1px solid #2A2A31; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+                <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: #A1A1AA; font-weight: 600">Publicación</span>
+                <button type="button" onClick="{{ savePublished }}" style="min-height: 46px; background: #00E5C0; color: #09090B; border: 0; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; box-shadow: 0 0 0 1px #00E5C0, 0 8px 32px -8px rgba(0,229,192,.25); transition: background 180ms cubic-bezier(.2,.8,.2,1)" style-hover="background: #00B99C">Publicar ahora</button>
+                <button type="button" onClick="{{ saveDraft }}" style="min-height: 44px; background: transparent; color: #FAFAFA; border: 1px solid #2A2A31; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer" style-hover="border-color: #A1A1AA">Guardar como borrador</button>
+                <sc-if value="{{ formError }}" hint-placeholder-val="{{ false }}">
+                  <div style="display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: rgba(243,18,96,.12); border-radius: 6px">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#F31260" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v4M12 16h.01"></path></svg>
+                    <span style="font-size: 13px; color: #F31260">Completá modelo, capacidad, color y precio en USD.</span>
+                  </div>
+                </sc-if>
+              </div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+    </div>
+
+      <sc-if value="{{ showFloatingWa }}" hint-placeholder-val="{{ false }}">
+        <button type="button" onClick="{{ waFloating }}" aria-label="Consultar por WhatsApp" style="position: absolute; right: 20px; bottom: calc(20px + env(safe-area-inset-bottom)); z-index: 55; width: 56px; height: 56px; border-radius: 999px; background: #25D366; color: #09090B; border: 0; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 10px 30px -6px rgba(0,0,0,.6); animation: maFade 180ms cubic-bezier(.2,.8,.2,1) both">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.46 1.32 4.96L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.83 9.83 0 0 0 12.04 2Zm0 18.13c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.24 8.24 0 0 1-1.26-4.36c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.83 2.42a8.2 8.2 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.24 8.24Zm4.52-6.17c-.25-.12-1.47-.72-1.69-.8-.23-.09-.4-.13-.56.12-.17.25-.64.8-.79.97-.14.16-.29.18-.54.06-.25-.12-1.05-.39-2-1.23a7.4 7.4 0 0 1-1.36-1.7c-.14-.25-.02-.38.11-.5.11-.12.25-.29.37-.44.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.44-.06-.12-.56-1.35-.77-1.84-.2-.49-.41-.42-.56-.43h-.48c-.16 0-.42.06-.64.31-.22.25-.83.81-.83 1.98 0 1.17.85 2.3.97 2.46.12.16 1.67 2.55 4.04 3.58.57.24 1.01.39 1.35.5.57.18 1.09.15 1.5.09.46-.07 1.4-.57 1.6-1.13.2-.55.2-1.03.14-1.13-.06-.1-.23-.16-.48-.28Z"></path></svg>
+        </button>
+      </sc-if>
+
+      <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+        <div style="position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 70; width: min(520px, calc(100% - 32px)); background: #1E1E23; border: 1px solid #2A2A31; border-radius: 12px; padding: 14px 16px; display: flex; gap: 12px; align-items: flex-start; box-shadow: 0 20px 50px -12px rgba(0,0,0,.8); animation: maFade 180ms cubic-bezier(.2,.8,.2,1) both">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#25D366" style="flex-shrink: 0; margin-top: 1px"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.46 1.32 4.96L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.83 9.83 0 0 0 12.04 2Zm0 18.13c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.24 8.24 0 0 1-1.26-4.36c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.83 2.42a8.2 8.2 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.24 8.24Z"></path></svg>
+          <div style="min-width: 0">
+            <div style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: #A1A1AA; font-weight: 600; margin-bottom: 4px">{{ toastTitle }}</div>
+            <div style="font-size: 13px; line-height: 1.5; color: #FAFAFA; text-wrap: pretty">{{ toast }}</div>
+          </div>
+          <button type="button" onClick="{{ hideToast }}" aria-label="Cerrar" style="margin-left: auto; background: transparent; border: 0; color: #A1A1AA; cursor: pointer; display: flex; padding: 2px" style-hover="color: #FAFAFA">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"></path></svg>
+          </button>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ lightbox }}" hint-placeholder-val="{{ false }}">
+        <div onClick="{{ closeLightbox }}" style="position: absolute; inset: 0; z-index: 80; background: rgba(9,9,11,.94); display: flex; align-items: center; justify-content: center; padding: 32px; animation: maFade 180ms cubic-bezier(.2,.8,.2,1) both">
+          <div style="width: min(560px, 100%); aspect-ratio: 4/5; border: 1px solid #2A2A31; border-radius: 12px; overflow: hidden; background: #131316"><image-slot id="{{ d.imgId }}" shape="rect" placeholder="{{ d.imgHint }}"></image-slot></div>
+        </div>
+      </sc-if>
+
+    </div>
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;viewport&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;desktop&quot;,&quot;mobile&quot;],&quot;default&quot;:&quot;desktop&quot;,&quot;tsType&quot;:&quot;'desktop' | 'mobile'&quot;,&quot;section&quot;:&quot;Prototipo&quot;},&quot;showAnnouncement&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Catálogo&quot;},&quot;showArs&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Catálogo&quot;},&quot;whatsappPhone&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;5491123456789&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Contacto&quot;}}">
+class Component extends DCLogic {
+  static RATE = 1480;
+  static SITE = 'https://mundoapple.com.ar';
+  static COND = {
+    nuevo: { label: 'NUEVO SELLADO', color: '#00E5C0', bg: 'rgba(0,229,192,.12)' },
+    seminuevo: { label: 'SEMINUEVO', color: '#A1A1AA', bg: 'rgba(161,161,170,.12)' },
+    reacondicionado: { label: 'REACONDICIONADO', color: '#F5A524', bg: 'rgba(245,165,36,.12)' }
+  };
+  static PRODUCTS = [
+    { id: 'p1', model: 'iPhone 17 Pro Max', generation: 17, storage: 256, color: 'Azul Intenso', condition: 'nuevo', battery: null, box: true, warranty: 12, usd: 1450, stock: 2, featured: true, status: 'published', description: 'Sellado, precinto original de fábrica. Libre de cualquier operador, apto eSIM y chip físico.', specs: { Pantalla: '6.9" Super Retina XDR', Chip: 'A19 Pro', 'Cámara': '48 MP Fusion + teleobjetivo 5x', Conectividad: '5G · eSIM + SIM' } },
+    { id: 'p2', model: 'iPhone 17', generation: 17, storage: 256, color: 'Blanco Niebla', condition: 'nuevo', battery: null, box: true, warranty: 12, usd: 1050, stock: 3, featured: false, status: 'published', description: 'Sellado. Entrega el mismo día en La Rioja Capital si confirmás antes de las 16 h.', specs: { Pantalla: '6.3" Super Retina XDR', Chip: 'A19', 'Cámara': '48 MP Dual Fusion', Conectividad: '5G · eSIM + SIM' } },
+    { id: 'p3', model: 'iPhone 16 Pro', generation: 16, storage: 256, color: 'Titanio Desierto', condition: 'seminuevo', battery: 97, box: true, warranty: 6, usd: 1020, stock: 1, featured: false, status: 'published', description: 'Cuatro meses de uso con funda y vidrio desde el día uno. Sin marcas en el marco ni en la pantalla.', specs: { Pantalla: '6.3" Super Retina XDR', Chip: 'A18 Pro', 'Cámara': '48 MP Fusion + teleobjetivo 5x', Conectividad: '5G · eSIM + SIM' } },
+    { id: 'p4', model: 'iPhone 16', generation: 16, storage: 128, color: 'Ultramarino', condition: 'seminuevo', battery: 94, box: false, warranty: 6, usd: 720, stock: 2, featured: false, status: 'published', description: 'Sin caja, incluye cable USB-C nuevo. Un micro rayón en la tapa que no se ve con funda.', specs: { Pantalla: '6.1" Super Retina XDR', Chip: 'A18', 'Cámara': '48 MP Dual Fusion', Conectividad: '5G · eSIM + SIM' } },
+    { id: 'p5', model: 'iPhone 15 Pro Max', generation: 15, storage: 256, color: 'Titanio Natural', condition: 'seminuevo', battery: 91, box: true, warranty: 6, usd: 940, stock: 1, featured: true, status: 'published', description: 'Batería 91%, nunca abierto ni reparado. Caja completa con cable original.', specs: { Pantalla: '6.7" Super Retina XDR', Chip: 'A17 Pro', 'Cámara': '48 MP + teleobjetivo 5x', Conectividad: '5G · eSIM + SIM' } },
+    { id: 'p6', model: 'iPhone 15', generation: 15, storage: 128, color: 'Verde', condition: 'seminuevo', battery: 93, box: false, warranty: 6, usd: 620, stock: 4, featured: false, status: 'published', description: 'Cuatro unidades disponibles en el mismo estado. Consultá por color antes de reservar.', specs: { Pantalla: '6.1" Super Retina XDR', Chip: 'A16 Bionic', 'Cámara': '48 MP Dual', Conectividad: '5G · eSIM + SIM' } },
+    { id: 'p7', model: 'iPhone 14', generation: 14, storage: 128, color: 'Medianoche', condition: 'reacondicionado', battery: 89, box: false, warranty: 3, usd: 470, stock: 2, featured: false, status: 'published', description: 'Pantalla cambiada por original de service. Batería con 89% de salud, funciona sin avisos.', specs: { Pantalla: '6.1" Super Retina XDR', Chip: 'A15 Bionic', 'Cámara': '12 MP Dual', Conectividad: '5G · eSIM + SIM' } },
+    { id: 'p8', model: 'iPhone 13', generation: 13, storage: 128, color: 'Rosa', condition: 'seminuevo', battery: 87, box: true, warranty: 3, usd: 380, stock: 1, featured: false, status: 'published', description: 'Equipo de señora, siempre en funda. Batería 87%, conviene cambiarla dentro del año.', specs: { Pantalla: '6.1" Super Retina XDR', Chip: 'A15 Bionic', 'Cámara': '12 MP Dual', Conectividad: '5G · eSIM + SIM' } },
+    { id: 'p9', model: 'iPhone 16 Plus', generation: 16, storage: 512, color: 'Negro', condition: 'seminuevo', battery: 95, box: true, warranty: 6, usd: 880, stock: 1, featured: false, status: 'draft', description: 'Falta sacar las fotos. No publicar hasta confirmar el precio con el dueño.', specs: { Pantalla: '6.7" Super Retina XDR', Chip: 'A18', 'Cámara': '48 MP Dual Fusion', Conectividad: '5G · eSIM + SIM' } },
+    { id: 'p10', model: 'iPhone 12', generation: 12, storage: 128, color: 'Azul', condition: 'reacondicionado', battery: 84, box: false, warranty: 3, usd: 290, stock: 0, featured: false, status: 'sold', description: 'Vendido el 3 de septiembre.', specs: { Pantalla: '6.1" Super Retina XDR', Chip: 'A14 Bionic', 'Cámara': '12 MP Dual', Conectividad: '5G · eSIM + SIM' } }
+  ];
+
+  state = {
+    route: 'landing',
+    viewport: this.props.viewport || 'desktop',
+    detailId: 'p5',
+    products: Component.PRODUCTS.map(p => Object.assign({}, p)),
+    queryDraft: '',
+    query: '',
+    gens: [],
+    conds: [],
+    caps: [],
+    priceMin: 300,
+    priceMax: 1600,
+    sort: 'recientes',
+    annDismissed: false,
+    scrolled: false,
+    toast: null,
+    toastTitle: 'WhatsApp',
+    lightbox: false,
+    loggedIn: false,
+    loginEmail: '',
+    loginPass: '',
+    loginError: false,
+    adminQuery: '',
+    adminStatus: 'todos',
+    confirmDelete: null,
+    inquiries: 14,
+    editingId: null,
+    formError: false,
+    form: this.blankForm()
+  };
+
+  blankForm() {
+    return { model: '', storage: '', color: '', battery: '', warranty: '', usd: '', ars: '', stock: '1', condition: 'seminuevo', description: '', featured: false };
+  }
+
+  componentDidUpdate(prev) {
+    if (prev.viewport !== this.props.viewport && this.props.viewport) {
+      this.setState({ viewport: this.props.viewport });
+    }
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this._q);
+    clearTimeout(this._t);
+  }
+
+  slugify(s) {
+    return String(s).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  }
+
+  money(n) {
+    return 'USD ' + Number(n).toLocaleString('es-AR');
+  }
+
+  ars(n) {
+    return '$ ' + Math.round(Number(n) * Component.RATE).toLocaleString('es-AR');
+  }
+
+  specLine(p) {
+    const bits = [p.storage + ' GB', p.color];
+    bits.push(p.battery ? 'Batería ' + p.battery + '%' : 'Sellado');
+    if (p.warranty) bits.push(p.warranty + ' meses de garantía');
+    return bits.join(' · ');
+  }
+
+  slugOf(p) {
+    return this.slugify(p.model + '-' + p.storage + '-' + p.color) + '-' + p.id;
+  }
+
+  badgeStyle(cond) {
+    const c = Component.COND[cond] || Component.COND.seminuevo;
+    return 'display: inline-block; padding: 4px 9px; border-radius: 999px; font-size: 11px; font-weight: 600; letter-spacing: 0.02em; white-space: nowrap; background: ' + c.bg + '; color: ' + c.color;
+  }
+
+  chipStyle(active) {
+    const base = 'min-height: 32px; padding: 0 12px; border-radius: 999px; font-size: 12px; font-weight: 500; cursor: pointer; white-space: nowrap; transition: all 180ms cubic-bezier(.2,.8,.2,1); ';
+    return active
+      ? base + 'background: rgba(0,229,192,.14); border: 1px solid #00E5C0; color: #00E5C0'
+      : base + 'background: #131316; border: 1px solid #2A2A31; color: #A1A1AA';
+  }
+
+  toast(title, msg) {
+    clearTimeout(this._t);
+    this.setState({ toast: msg, toastTitle: title });
+    this._t = setTimeout(() => this.setState({ toast: null }), 6000);
+  }
+
+  waMessage(p) {
+    if (!p) return 'Hola Mundo Apple 👋 Quería consultar por los equipos disponibles.';
+    const cond = p.condition === 'nuevo' ? 'nuevo sellado' : p.condition;
+    return 'Hola Mundo Apple 👋 Me interesa el ' + p.model + ' ' + p.storage + 'GB ' + p.color +
+      ' (' + cond + ') — ' + this.money(p.usd) + '. Link: ' + Component.SITE + '/producto/' + this.slugOf(p) + ' ¿Sigue disponible?';
+  }
+
+  fireWa(p, source) {
+    const phone = this.props.whatsappPhone || '5491123456789';
+    const msg = this.waMessage(p);
+    const url = 'https://wa.me/' + phone + '?text=' + encodeURIComponent(msg);
+    this.setState(s => ({ inquiries: s.inquiries + 1 }));
+    this.toast('wa.me/' + phone + ' · origen: ' + source, msg);
+    return url;
+  }
+
+  publicList() {
+    const s = this.state;
+    const q = s.query.trim().toLowerCase();
+    let list = s.products.filter(p => p.status === 'published');
+    if (q) list = list.filter(p => (p.model + ' ' + p.color + ' ' + p.description).toLowerCase().includes(q));
+    if (s.gens.length) list = list.filter(p => s.gens.includes(p.generation));
+    if (s.conds.length) list = list.filter(p => s.conds.includes(p.condition));
+    if (s.caps.length) list = list.filter(p => s.caps.includes(p.storage));
+    const lo = Math.min(s.priceMin, s.priceMax), hi = Math.max(s.priceMin, s.priceMax);
+    list = list.filter(p => p.usd >= lo && p.usd <= hi);
+    if (s.sort === 'asc') list = list.slice().sort((a, b) => a.usd - b.usd);
+    else if (s.sort === 'desc') list = list.slice().sort((a, b) => b.usd - a.usd);
+    else list = list.slice().sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0) || b.generation - a.generation);
+    return list;
+  }
+
+  cardVals(p, prefix) {
+    const showArs = this.props.showArs !== false;
+    return {
+      id: p.id,
+      model: p.model,
+      specLine: this.specLine(p),
+      shortSpec: p.storage + ' GB · ' + p.color,
+      priceUsdLabel: this.money(p.usd),
+      priceArsLabel: this.ars(p.usd) + ' al cambio de hoy',
+      showArs: showArs,
+      badgeLabel: (Component.COND[p.condition] || {}).label,
+      badgeStyle: this.badgeStyle(p.condition),
+      isLast: p.stock === 1,
+      imgId: 'img-' + p.id,
+      relImgId: 'rel-' + p.id,
+      imgHint: p.model + ' ' + p.color,
+      open: () => { this.setState({ route: 'detail', detailId: p.id, lightbox: false }); this.scrollTop(); },
+      wa: (e) => { if (e) { e.stopPropagation(); e.preventDefault(); } this.fireWa(p, prefix); }
+    };
+  }
+
+  scrollTop() {
+    const el = this._scroll;
+    if (el) el.scrollTop = 0;
+    this.setState({ scrolled: false });
+  }
+
+  setForm(key) {
+    return (e) => {
+      const v = e.target.value;
+      this.setState(s => ({ form: Object.assign({}, s.form, { [key]: v }) }));
+    };
+  }
+
+  saveProduct(status) {
+    const f = this.state.form;
+    if (!f.model || !f.storage || !f.color || !f.usd) { this.setState({ formError: true }); return; }
+    const id = this.state.editingId || 'n' + Date.now().toString(36).slice(-4);
+    const next = {
+      id: id, model: f.model, generation: parseInt(String(f.model).replace(/\D+/g, ''), 10) || 0,
+      storage: parseInt(f.storage, 10) || 0, color: f.color, condition: f.condition,
+      battery: f.battery ? parseInt(f.battery, 10) : null, box: true,
+      warranty: parseInt(f.warranty, 10) || 0, usd: parseFloat(f.usd) || 0,
+      stock: parseInt(f.stock, 10) || 1, featured: !!f.featured, status: status,
+      description: f.description || 'Sin descripción cargada.',
+      specs: { Pantalla: '—', Chip: '—', 'Cámara': '—', Conectividad: '5G · eSIM + SIM' }
+    };
+    this.setState(s => {
+      const list = s.products.slice();
+      const i = list.findIndex(p => p.id === id);
+      if (i >= 0) list[i] = next; else list.unshift(next);
+      return { products: list, route: 'adminDash', formError: false, editingId: null, form: this.blankForm() };
+    });
+    this.toast('Inventario', status === 'published' ? next.model + ' publicado. Ya aparece en el catálogo.' : next.model + ' guardado como borrador.');
+  }
+
+  renderVals() {
+    const s = this.state;
+    const mobile = s.viewport === 'mobile';
+    const visible = this.publicList();
+    const detail = s.products.find(p => p.id === s.detailId) || s.products[0];
+    const showArs = this.props.showArs !== false;
+
+    const d = Object.assign({}, this.cardVals(detail, 'detail'), {
+      description: detail.description,
+      urlLabel: '/producto/' + this.slugOf(detail),
+      imgId2: 'img-' + detail.id + '-2',
+      imgId3: 'img-' + detail.id + '-3',
+      imgId4: 'img-' + detail.id + '-4',
+      specRows: [
+        { k: 'Condición', v: (Component.COND[detail.condition] || {}).label },
+        { k: 'Capacidad', v: detail.storage + ' GB' },
+        { k: 'Color', v: detail.color },
+        { k: 'Batería', v: detail.battery ? detail.battery + ' %' : 'Sellado' },
+        { k: 'Garantía', v: detail.warranty + ' meses' }
+      ].concat(Object.keys(detail.specs).map(k => ({ k: k, v: detail.specs[k] }))),
+      includes: [
+        { t: detail.box ? 'Caja original' : 'Sin caja, embalaje propio' },
+        { t: 'Cable USB-C' },
+        { t: 'Garantía escrita de ' + detail.warranty + ' meses' }
+      ]
+    });
+
+    const related = s.products
+      .filter(p => p.status === 'published' && p.id !== detail.id && (p.generation === detail.generation || p.model === detail.model))
+      .concat(s.products.filter(p => p.status === 'published' && p.id !== detail.id))
+      .filter((p, i, a) => a.indexOf(p) === i).slice(0, 4)
+      .map(p => this.cardVals(p, 'card'));
+
+    const toggleIn = (key, val) => () => this.setState(st => {
+      const arr = st[key].slice();
+      const i = arr.indexOf(val);
+      if (i >= 0) arr.splice(i, 1); else arr.push(val);
+      return { [key]: arr };
+    });
+
+    const adminRows = s.products
+      .filter(p => s.adminStatus === 'todos' || p.status === s.adminStatus)
+      .filter(p => !s.adminQuery || (p.model + ' ' + p.color).toLowerCase().includes(s.adminQuery.toLowerCase()))
+      .map(p => ({
+        model: p.model,
+        slug: this.slugOf(p),
+        priceUsdLabel: this.money(p.usd),
+        stock: p.stock,
+        badgeLabel: (Component.COND[p.condition] || {}).label,
+        badgeStyle: this.badgeStyle(p.condition),
+        statusLabel: p.status === 'published' ? 'Publicado' : p.status === 'draft' ? 'Borrador' : 'Vendido',
+        statusStyle: 'display: inline-block; padding: 4px 9px; border-radius: 999px; font-size: 11px; font-weight: 600; white-space: nowrap; ' +
+          (p.status === 'published' ? 'background: rgba(0,229,192,.12); color: #00E5C0' : p.status === 'draft' ? 'background: rgba(245,165,36,.12); color: #F5A524' : 'background: rgba(161,161,170,.12); color: #A1A1AA'),
+        publishLabel: p.status === 'published' ? 'Despublicar' : 'Publicar',
+        confirming: s.confirmDelete === p.id,
+        idle: s.confirmDelete !== p.id,
+        edit: () => this.setState({
+          route: 'adminForm', editingId: p.id, formError: false,
+          form: { model: p.model, storage: String(p.storage), color: p.color, battery: p.battery ? String(p.battery) : '', warranty: String(p.warranty), usd: String(p.usd), ars: '', stock: String(p.stock), condition: p.condition, description: p.description, featured: p.featured }
+        }),
+        togglePublish: () => this.setState(st => ({
+          products: st.products.map(x => x.id === p.id ? Object.assign({}, x, { status: x.status === 'published' ? 'draft' : 'published' }) : x)
+        })),
+        dup: () => this.setState(st => {
+          const copy = Object.assign({}, p, { id: 'c' + Date.now().toString(36).slice(-4), status: 'draft' });
+          return { products: [copy].concat(st.products) };
+        }),
+        askDel: () => this.setState({ confirmDelete: p.id }),
+        cancelDel: () => this.setState({ confirmDelete: null }),
+        del: () => this.setState(st => ({ products: st.products.filter(x => x.id !== p.id), confirmDelete: null }))
+      }));
+
+    const counters = [
+      { label: 'Publicados', value: s.products.filter(p => p.status === 'published').length },
+      { label: 'Borradores', value: s.products.filter(p => p.status === 'draft').length },
+      { label: 'Vendidos', value: s.products.filter(p => p.status === 'sold').length },
+      { label: 'Consultas del mes', value: s.inquiries }
+    ];
+
+    const anyFilter = !!(s.query || s.gens.length || s.conds.length || s.caps.length || s.priceMin !== 300 || s.priceMax !== 1600);
+    const params = [];
+    if (s.query) params.push('q=' + encodeURIComponent(s.query));
+    if (s.gens.length) params.push('gen=' + s.gens.slice().sort((a, b) => b - a).join(','));
+    if (s.conds.length) params.push('cond=' + s.conds.join(','));
+    if (s.caps.length) params.push('cap=' + s.caps.join(','));
+    if (s.priceMin !== 300 || s.priceMax !== 1600) params.push('usd=' + Math.min(s.priceMin, s.priceMax) + '-' + Math.max(s.priceMin, s.priceMax));
+    if (s.sort !== 'recientes') params.push('orden=' + s.sort);
+
+    return {
+      isLanding: s.route === 'landing',
+      isDetail: s.route === 'detail',
+      isAdmin: s.route === 'adminDash' || s.route === 'adminForm' || s.route === 'adminLogin',
+      isAdminLogin: s.route === 'adminLogin',
+      isAdminDash: s.route === 'adminDash',
+      isAdminForm: s.route === 'adminForm',
+      viewportLabel: mobile ? 'Mobile 375' : 'Desktop',
+      wrapStyle: mobile
+        ? 'position: relative; width: 375px; max-width: 100%; height: calc(100vh - 45px); overflow: hidden; border-left: 1px solid #2A2A31; border-right: 1px solid #2A2A31; background: #09090B'
+        : 'position: relative; width: 100%; height: calc(100vh - 45px); overflow: hidden; background: #09090B',
+      frameStyle: mobile
+        ? 'width: 100%; height: 100%; overflow: auto; overflow-x: hidden'
+        : 'width: 100%; height: 100%; overflow: auto',
+      scrollRef: (el) => { this._scroll = el; },
+      onScroll: (e) => {
+        const y = e.target.scrollTop;
+        if (y > 400 !== s.scrolled) this.setState({ scrolled: y > 400 });
+      },
+      showFloatingWa: s.scrolled && (s.route === 'landing' || s.route === 'detail'),
+      showAnn: this.props.showAnnouncement !== false && !s.annDismissed,
+      dismissAnn: () => this.setState({ annDismissed: true }),
+      goLanding: () => { this.setState({ route: 'landing', lightbox: false }); this.scrollTop(); },
+      goFirstDetail: () => { this.setState({ route: 'detail', lightbox: false }); this.scrollTop(); },
+      goAdmin: () => { this.setState({ route: s.loggedIn ? 'adminDash' : 'adminLogin' }); this.scrollTop(); },
+      goAdminDash: () => { this.setState({ route: 'adminDash', editingId: null, formError: false, form: this.blankForm() }); this.scrollTop(); },
+      toggleViewport: () => this.setState({ viewport: mobile ? 'desktop' : 'mobile' }),
+      waShort: mobile ? '' : 'WhatsApp',
+      waHeader: () => this.fireWa(null, 'header'),
+      waFloating: () => this.fireWa(s.route === 'detail' ? detail : null, 'floating'),
+      queryDraft: s.queryDraft,
+      onQuery: (e) => {
+        const v = e.target.value;
+        this.setState({ queryDraft: v });
+        clearTimeout(this._q);
+        this._q = setTimeout(() => this.setState({ query: v }), 300);
+      },
+      genChips: [17, 16, 15, 14, 13].map(g => ({ label: 'iPhone ' + g, style: this.chipStyle(s.gens.includes(g)), toggle: toggleIn('gens', g) })),
+      condChips: ['nuevo', 'seminuevo', 'reacondicionado'].map(c => ({ label: Component.COND[c].label, style: this.chipStyle(s.conds.includes(c)), toggle: toggleIn('conds', c) })),
+      capChips: [128, 256, 512].map(c => ({ label: c + ' GB', style: this.chipStyle(s.caps.includes(c)), toggle: toggleIn('caps', c) })),
+      priceMin: s.priceMin,
+      priceMax: s.priceMax,
+      onPriceMin: (e) => this.setState({ priceMin: parseInt(e.target.value, 10) }),
+      onPriceMax: (e) => this.setState({ priceMax: parseInt(e.target.value, 10) }),
+      priceRangeLabel: Math.min(s.priceMin, s.priceMax) + '–' + Math.max(s.priceMin, s.priceMax),
+      sort: s.sort,
+      onSort: (e) => this.setState({ sort: e.target.value }),
+      resultsLabel: visible.length === 1 ? '1 equipo disponible' : visible.length + ' equipos disponibles',
+      anyFilter: anyFilter,
+      clearFilters: () => this.setState({ query: '', queryDraft: '', gens: [], conds: [], caps: [], priceMin: 300, priceMax: 1600, sort: 'recientes' }),
+      urlLabel: params.length ? '/?' + params.join('&') : '/',
+      visible: visible.map(p => this.cardVals(p, 'card')),
+      empty: visible.length === 0,
+      d: d,
+      related: related,
+      lightbox: s.lightbox,
+      openLightbox: () => this.setState({ lightbox: true }),
+      closeLightbox: () => this.setState({ lightbox: false }),
+      toast: s.toast,
+      toastTitle: s.toastTitle,
+      hideToast: () => { clearTimeout(this._t); this.setState({ toast: null }); },
+      loginEmail: s.loginEmail,
+      loginPass: s.loginPass,
+      loginError: s.loginError,
+      onLoginEmail: (e) => this.setState({ loginEmail: e.target.value, loginError: false }),
+      onLoginPass: (e) => this.setState({ loginPass: e.target.value, loginError: false }),
+      doLogin: () => {
+        if (!s.loginEmail || !s.loginPass) { this.setState({ loginError: true }); return; }
+        this.setState({ loggedIn: true, route: 'adminDash', loginError: false });
+      },
+      adminQuery: s.adminQuery,
+      onAdminQuery: (e) => this.setState({ adminQuery: e.target.value }),
+      statusChips: [
+        { key: 'todos', label: 'Todos' },
+        { key: 'published', label: 'Publicados' },
+        { key: 'draft', label: 'Borradores' },
+        { key: 'sold', label: 'Vendidos' }
+      ].map(c => ({ label: c.label, style: this.chipStyle(s.adminStatus === c.key), toggle: () => this.setState({ adminStatus: c.key }) })),
+      adminRows: adminRows,
+      adminEmpty: adminRows.length === 0,
+      counters: counters,
+      newProduct: () => this.setState({ route: 'adminForm', editingId: null, formError: false, form: this.blankForm() }),
+      formTitle: s.editingId ? 'Editar equipo' : 'Nuevo equipo',
+      formFields: [
+        { label: 'Modelo', value: s.form.model, placeholder: 'iPhone 16 Pro', onChange: this.setForm('model') },
+        { label: 'Capacidad (GB)', value: s.form.storage, placeholder: '256', onChange: this.setForm('storage') },
+        { label: 'Color', value: s.form.color, placeholder: 'Titanio Desierto', onChange: this.setForm('color') },
+        { label: 'Salud de batería (%)', value: s.form.battery, placeholder: '94 — vacío si es sellado', onChange: this.setForm('battery') },
+        { label: 'Garantía (meses)', value: s.form.warranty, placeholder: '6', onChange: this.setForm('warranty') },
+        { label: 'Precio USD', value: s.form.usd, placeholder: '1020', onChange: this.setForm('usd'), subLabel: s.form.usd ? this.ars(s.form.usd) + ' al cambio de hoy' : '' },
+        { label: 'Stock', value: s.form.stock, placeholder: '1', onChange: this.setForm('stock') }
+      ],
+      formCondition: s.form.condition,
+      onFormCondition: this.setForm('condition'),
+      formDescription: s.form.description,
+      onFormDescription: this.setForm('description'),
+      formSlug: s.form.model ? this.slugify(s.form.model + '-' + s.form.storage + '-' + s.form.color) : 'se-genera-al-escribir-el-modelo',
+      formError: s.formError,
+      toggleFeatured: () => this.setState(st => ({ form: Object.assign({}, st.form, { featured: !st.form.featured }) })),
+      featuredToggleStyle: 'width: 44px; height: 26px; border-radius: 999px; border: 1px solid ' + (s.form.featured ? '#00E5C0' : '#2A2A31') + '; background: ' + (s.form.featured ? 'rgba(0,229,192,.18)' : '#131316') + '; cursor: pointer; padding: 2px; display: flex; justify-content: ' + (s.form.featured ? 'flex-end' : 'flex-start') + '; transition: all 180ms cubic-bezier(.2,.8,.2,1)',
+      featuredKnobStyle: 'width: 20px; height: 20px; border-radius: 999px; background: ' + (s.form.featured ? '#00E5C0' : '#A1A1AA') + '; display: block',
+      savePublished: () => this.saveProduct('published'),
+      saveDraft: () => this.saveProduct('draft')
+    };
+  }
+}
+</script>
+</body>
+</html>
